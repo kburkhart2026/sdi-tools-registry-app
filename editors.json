@@ -49,6 +49,22 @@
    },
    "added": "2026-10-08T16:47:47.310Z",
    "expires": "2027-10-08T19:00:00.000Z"
+  },
+  {
+   "name": "James M.",
+   "admin": false,
+   "state": "setup",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "sSgro6hFfS3hVMsaZL3ogg==",
+    "iv": "WA+qqItSyo/H2B7X",
+    "ciphertext": "s+XqN7PaG0KjbqEuAGqjcD5xyNLCQEwfyRUPRme/pqGLBHcNCjQ6mPzhFwTFUvuOI1miMON7k5qPPU4ZOXfIdXyP7E5nk2GH7XXr8LkjCl5GFGlQQ8WhJp9RUXbxW1mhQ3+oeQKqlnIz3VlH7w=="
+   },
+   "added": "2026-10-08T16:49:47.827Z",
+   "expires": "2027-10-08T19:00:00.000Z"
   }
  ]
 }
