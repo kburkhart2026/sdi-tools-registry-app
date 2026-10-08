@@ -65,6 +65,22 @@
    },
    "added": "2026-10-08T16:49:47.827Z",
    "expires": "2027-10-08T19:00:00.000Z"
+  },
+  {
+   "name": "Amelia D.",
+   "admin": false,
+   "state": "setup",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "+PTdB1YyAdiFDjY28snN7Q==",
+    "iv": "aWk4opZBvo/RAEyU",
+    "ciphertext": "eK8SPgbNeE6ZGDc3egEXlV0oepfjQYcsQUT6HvCY72gRjw//wg9EuOq3wpgpTyoTpTKixflkvKtl5rUAVU4HE/7CUH4Z3T3zIUP1DUm0y7j2FTSrvOG6FP/uDaNt6QjvMnWg74EpJpmMH5neLw=="
+   },
+   "added": "2026-10-08T16:50:40.153Z",
+   "expires": "2027-10-08T19:00:00.000Z"
   }
  ]
 }
