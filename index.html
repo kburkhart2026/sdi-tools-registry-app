@@ -1060,7 +1060,6 @@ table.edt td.r{text-align:right;white-space:nowrap}
   <div class="who">
     <span class="menu-wrap" id="toolsWrap" hidden><button class="pill-btn cog-btn" data-act="toolsMenu" aria-haspopup="true" aria-expanded="false" id="toolsBtn" title="App tools" aria-label="App tools"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
       <div class="menu cog-menu" id="toolsMenu" role="menu" hidden></div></span>
-    <button class="pill-btn" data-act="panel" data-kind="backups" id="bkBtn">Backups</button>
     <button class="pill-btn" data-act="panel" data-kind="me" id="whoBtn">Sign in</button>
   </div>
 </header>
@@ -2306,7 +2305,6 @@ function renderRail(){
 }
 function renderTop(){
   $('#whoBtn').textContent = !session ? 'Sign in' : session.kind === 'viewer' ? 'Viewer' : session.name+' · Editor';
-  $('#bkBtn').hidden = !session || session.kind !== 'editor' || !S.doc;
 }
 function renderTabs(){
   const inTool = toolViews().includes(S.tab);
@@ -2329,6 +2327,7 @@ const COG_ICONS = {
   prog:'<rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 17.5h7M17.5 14v7"/>',
   xlsx:'<path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z"/><path d="M14 3v5h5M9 12l4 5M13 12l-4 5"/>',
   up:'<path d="M12 15V4M7 9l5-5 5 5"/><path d="M5 15v3.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V15"/>',
+  backup:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
   user:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18.5 14.8c1.6.8 2.6 2.5 3 5.2"/>'
 };
 function cogMenuHtml(){
@@ -2338,15 +2337,15 @@ function cogMenuHtml(){
   const un = clogUnread(S.doc);
   return sec('Records', tv.map(t => item(COG_ICONS[t], { registry:'Course registry', catalog:'Full tool catalog' }[t] || TAB_LABEL[t], 'data-act="tab" data-tab="'+t+'"', t === S.tab)).join('')+
       (tv.includes('registry') ? item(COG_ICONS.prog, 'Program registry', 'data-act="progReg"', !!S.panel && S.panel.kind === 'programs') : '')+
-      item(COG_ICONS.log, 'Changelog', 'data-act="clog"', !!S.panel && S.panel.kind === 'clog').replace('</span></button>', '</span>'+(un ? '<span class="cogn">'+(un > 99 ? '99+' : un)+'</span>' : '')+'</button>')+
-      (isAdmin() ? item(COG_ICONS.user, 'Editors', 'data-act="panel" data-kind="editors"', !!S.panel && S.panel.kind === 'editors') : ''))+
+      item(COG_ICONS.log, 'Changelog', 'data-act="clog"', !!S.panel && S.panel.kind === 'clog').replace('</span></button>', '</span>'+(un ? '<span class="cogn">'+(un > 99 ? '99+' : un)+'</span>' : '')+'</button>'))+
     sec('Maps', item(PG_ICONS.map, 'Program tool map', 'data-act="cogView" data-v="map"', view === 'map')+item(PG_ICONS.week, 'Week/Module tool map', 'data-act="cogView" data-v="week"', view === 'week'))+
     sec('Files', exportItems(view).map(([a, l]) => item(/image/.test(l) ? COG_ICONS.img : COG_ICONS.csv, l, 'data-act="'+a+'"')).join('')+
       (tv.length ? item(COG_ICONS.xlsx, 'Excel template', 'data-act="impTpl"') : '')+
       (tv.length && role().costs ? TPL_SCHOOLS.map(sc => item(COG_ICONS.xlsx, 'Excel workbook · '+sc, 'data-act="impTpl" data-school="'+sc+'"')).join('') : '')+
       (tv.length && role().assign ? item(COG_ICONS.up, 'Import from Excel', 'data-act="panel" data-kind="imp"', !!S.panel && S.panel.kind === 'imp') : ''))+
     (marginOk() ? sec('Costs', item(COG_ICONS.margin, 'Margin calculator', 'data-act="margin"', !!S.panel && S.panel.kind === 'margin')) : '')+
-    '';
+    (isAdmin() ? sec('Admin', item(COG_ICONS.user, 'Editors', 'data-act="panel" data-kind="editors"', !!S.panel && S.panel.kind === 'editors')+
+      item(COG_ICONS.backup, 'Backups', 'data-act="panel" data-kind="backups"', !!S.panel && S.panel.kind === 'backups')) : '');
 }
 function renderBanner(){
   let h = '';
@@ -2375,7 +2374,7 @@ function renderFoot(){
   else h += '<span>Not signed in</span>';
   if(S.busy) h += '<span class="chip info">Saving…</span>';
   h += '<span class="sp"></span>';
-  if(S.doc && S.mode !== 'view') h += '<span>'+(stale ? '<span class="chip warn">Backup</span> ' : '')+'Last backup downloaded: '+esc(ago(lb))+'</span> <button class="link" data-act="download">Download one now</button>';
+  if(S.doc && (isAdmin() || S.mode === 'local')) h += '<span>'+(stale ? '<span class="chip warn">Backup</span> ' : '')+'Last backup downloaded: '+esc(ago(lb))+'</span> <button class="link" data-act="download">Download one now</button>';
   $('#foot').innerHTML = h;
 }
 function renderMain(){
@@ -2867,7 +2866,7 @@ function progCardHtml(d, x, pr, costs, sm){
   const key = listKey(d, x.code, pr.id);
   const ib = (icon, label, attrs) => '<button class="btn sm ab" '+attrs+'>'+svgI(icon, null, 2, 16)+label+'</button>';
   const reuse = edit ? reuseAddHtml(d, x.code) : '';
-  const stack = [allowedView('registry') ? ib(CC_ICONS.rec, 'Course record', 'data-act="gocrs" data-code="'+esc(x.code)+'"') : '',
+  const stack = [ib(CC_ICONS.rec, 'Course record', 'data-act="gocrs" data-code="'+esc(x.code)+'"'),
     ib(PG_ICONS.map, 'Course tool map', 'data-act="cmap" data-code="'+esc(x.code)+'"'),
     edit ? ib(CC_ICONS.add, 'Add new tool', 'data-act="panel" data-kind="add" data-code="'+esc(x.code)+'" data-key="'+esc(key)+'"') : '',
     reuse ? '<span class="selw">'+svgI(CC_ICONS.reuse, null, 2, 16)+reuse+'</span>' : ''].filter(Boolean).join('');
@@ -2891,7 +2890,7 @@ function reuseAddHtml(d, code){
   return '<select class="btn sm ab" data-change="addReuse" data-code="'+esc(code)+'" aria-label="Add a reused tool"><option value="">Reused tool</option>'+
     Object.keys(groups).sort(byCode).map(g => '<optgroup label="Bought in '+esc(g)+'">'+groups[g].sort((a, b) => a.name.localeCompare(b.name)).map(it => '<option value="'+it.id+'">'+esc(it.name)+'</option>').join('')+'</optgroup>').join('')+'</select>';
 }
-function linkCell(it){ const u = safeLink(it.link); return u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener">Link</a>' : '<span class="miss">Missing</span>'; }
+function linkCell(it){ const u = safeLink(it.link); return u ? '<a href="'+esc(u)+'" target="_blank" rel="noopener">Link</a>' : isViewer() ? '<span class="dash">—</span>' : '<span class="miss">Missing</span>'; }
 // One course's tools: a row each, grouped by who supplies them only when both
 // kinds are there, and the tools reused from other courses at the bottom.
 function toolTableHtml(d, code, key, rows, carried, o){
@@ -2904,7 +2903,7 @@ function toolTableHtml(d, code, key, rows, carried, o){
     for(const l of L){
       const it = d.items[l.item], q = l.qty ?? 1, dup = openDupFor(d, l.item), also = reusedIn(d, it);
       const meta = [it.brand && !it.brandRequired ? 'Brand: '+esc(it.brand) : '', it.type === 'textbook' && it.isbn ? 'ISBN '+esc(it.isbn) : '', it.kind ? esc(kindLabel(it.kind)) : '', it.vendor ? esc(it.vendor) : '',
-        also.length ? 'Also used in '+esc(also.join(', ')) : '', dup ? '<span class="miss">Possible duplicate</span>' : '', l.qty == null ? '<span class="miss" title="The workbook left this blank. It is counted as 1.">Blank qty · counted as 1</span>' : '', l.note ? esc(l.note) : ''].filter(Boolean).join(' · ');
+        also.length ? 'Also used in '+esc(also.join(', ')) : '', dup && !isViewer() ? '<span class="miss">Possible duplicate</span>' : '', l.qty == null && !isViewer() ? '<span class="miss" title="The workbook left this blank. It is counted as 1.">Blank qty · counted as 1</span>' : '', l.note ? esc(l.note) : ''].filter(Boolean).join(' · ');
       const at = ' data-code="'+esc(code)+'" data-key="'+esc(key)+'" data-id="'+l.item+'"';
       h += '<tr><td><button class="tlink" data-act="panel" data-kind="item" data-id="'+l.item+'">'+esc(it.name)+'</button>'+(it.brandRequired ? '<span class="badge" title="Brand required">Brand: '+esc(it.brand || 'required')+'</span>' : '')+(meta ? '<div class="tm">'+meta+'</div>' : '')+'</td>'+
         '<td class="num">'+(o.edit ? '<input class="qin" type="number" min="0.01" step="any" value="'+(l.qty ?? '')+'" placeholder="1" data-change="qty"'+at+' aria-label="Quantity of '+esc(it.name)+'">' : q)+'</td>'+wk(it)+
@@ -3601,9 +3600,8 @@ PANELS.crs = function(p){
   if(sibs.length) body += '<div class="note plain">Also runs as '+sibs.map(x => '<button class="link" data-act="panel" data-kind="crs" data-id="'+esc(x.id)+'">'+esc(x.deliveryLabel || 'another delivery')+'</button>').join(', ')+'. That is a separate record, edited separately, and it shares this code’s tool list.</div>';
   const cell = (cls, html) => '<div class="'+cls+'">'+html+'</div>';
   body += '<div class="crs-grid">'+
-    cell('', inp('rCode', 'Code', r.code, ' style="text-transform:uppercase"', sibs.length ? 'Changes only this delivery.' : 'Moves its tool list with it.'))+
+    cell('', inp('rCode', 'Code', r.code, ' style="text-transform:uppercase"', !edit ? '' : sibs.length ? 'Changes only this delivery.' : 'Moves its tool list with it.'))+
     cell('span2', inp('rTitle', 'Course Title', r.title))+
-    cell('', '')+
     cell('', inp('rCredits', 'Semester Credit Hours', r.credits ?? '', ' inputmode="decimal"'))+
     cell('', inp('rWeeks', 'Length in Weeks/Modules', r.weeks ?? '', ' inputmode="numeric"'))+
     cell('span2', inp('rPrereqs', 'Prerequisites', crsText(r, 'prereqs'), ' placeholder="Codes, separated by commas"'))+
@@ -3687,10 +3685,19 @@ PANELS.changes = function(p){
 };
 
 PANELS.backups = function(p){
+  if(!isAdmin() && S.mode !== 'local') return panelFrame('Backups', '', '<p>Only an admin can open backups.</p>');
   const lb = lsGet(LS.lastBackup, 0);
   let body = '<div class="note plain">Nothing here overwrites anything. A restore saves the chosen version as a <b>new</b> change, so the version it replaces stays in the history and you can restore back to it. A snapshot of the current version is also kept in this browser before every save.</div>';
   body += '<h3 style="font-size:15px;margin:14px 0 6px">Keep a copy off GitHub</h3><p class="g" style="margin:0 0 8px">Last downloaded from this browser: '+esc(ago(lb))+'. A weekly download is a copy that survives even if the repo or the token is lost.</p>'+
     '<div class="row" style="justify-content:flex-start"><button class="btn pri" data-act="download"'+(S.doc ? '' : ' disabled')+'>Download a backup</button><button class="btn" data-act="restoreFile">Restore from a file…</button></div>';
+  // Nightly copies: a GitHub job saves registry.json each night on the backups branch.
+  if(S.mode === 'github'){
+    body += '<h3 style="font-size:15px;margin:20px 0 6px">Nightly copies</h3>';
+    if(p.nightly === undefined) body += '<p class="g">Loading…</p>';
+    else if(!p.nightly.length) body += '<p class="g">None yet. The first is made the night after the nightly job is added.</p>';
+    else body += '<ul class="muted-list">'+p.nightly.slice(0, 30).map(f => '<li class="row"><span>'+esc(fmtDay(f.day))+'<br><span class="g">'+esc(f.path)+'</span></span><button class="btn sm" data-act="previewNightly" data-path="'+esc(f.path)+'" data-day="'+esc(f.day)+'">Preview</button></li>').join('')+'</ul>'+
+      (p.nightly.length > 30 ? '<p class="g">'+(p.nightly.length - 30)+' older on the backups branch.</p>' : '');
+  }
   body += '<h3 style="font-size:15px;margin:20px 0 6px">Versions on GitHub</h3>';
   if(S.mode !== 'github') body += '<p class="g">Connect to GitHub to see the full history.</p>';
   else if(p.commits === undefined){ body += '<p class="g">Loading…</p>'; p.after = loadCommits; }
@@ -3705,6 +3712,10 @@ PANELS.backups = function(p){
 async function loadCommits(){
   const p = S.panel; if(!p || p.kind !== 'backups') return;
   try{ p.commits = await ghCommits(); }catch(e){ p.commits = []; p.commitsErr = e.message; }
+  try{
+    const r = await gh('/contents/backups?ref=backups');
+    p.nightly = r.ok ? (await r.json()).map(f => ({ path:f.path, day:(f.name.match(/(\d{4}-\d{2}-\d{2})/) || [])[1] })).filter(f => f.day).sort((a, b) => b.day.localeCompare(a.day)) : [];
+  }catch(e){ p.nightly = []; }
   if(S.panel === p) renderPanel();
 }
 async function loadSnaps(){
@@ -5021,6 +5032,10 @@ ACT.previewCommit = async b => {
   try{ const r = await ghRead(b.dataset.sha); openPanel({ kind:'preview', doc:migrate(r.doc), label:'GitHub version '+b.dataset.sha.slice(0,7) }); }
   catch(e){ toast(e.message, 'err'); }
 };
+ACT.previewNightly = async b => {
+  try{ const r = await ghRead('backups', cfg.repo, b.dataset.path); openPanel({ kind:'preview', doc:migrate(r.doc), label:'Nightly copy of '+fmtDay(b.dataset.day) }); }
+  catch(e){ toast(e.message, 'err'); }
+};
 ACT.previewSnap = async b => {
   const s = (await snapList()).find(x => String(x.id) === b.dataset.id);
   if(s) openPanel({ kind:'preview', doc:migrate(s.doc), label:'Snapshot from '+when(s.ts)+' ('+s.reason+')' });
@@ -5331,7 +5346,7 @@ ACT.rule = async b => {
 };
 
 // The course record opens in the side panel beside the page you are on.
-ACT.gocrs = b => { if(!allowedView('registry')) return; const r = S.doc.courseDb.courses.find(x => x.code === b.dataset.code); if(r) openPanel({ kind:'crs', id:r.id }); };
+ACT.gocrs = b => { const r = S.doc.courseDb.courses.find(x => x.code === b.dataset.code); if(r) openPanel({ kind:'crs', id:r.id }); };
 ACT.crumbProgram = b => {
   const pid = b.dataset.pid, code = b.dataset.code;
   S.progSel = pid; lsSet('str_prog', pid); S.collapsed.delete(code); saveCollapsed();
