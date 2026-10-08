@@ -1,0 +1,15 @@
+{
+ "v": 1,
+ "lock": {
+  "v": 1,
+  "alg": "AES-GCM",
+  "kdf": "PBKDF2-SHA256",
+  "iterations": 4000000,
+  "salt": "LveOXLwuv2KMVMcawFVCIA==",
+  "iv": "+GT596Qh8s52rZ1T",
+  "ciphertext": "p1jX4QXfmvXvbjXebVZ23iwrlwB9IK29dbDH6n5qYej/8XXDGDguw9nDg03+bocLedkINN7yW28s1kddV4JWBqkTQZKXLZ6gotrMoNQOGl/ZXgCUZZrKU5uhNbcxBOcJYVf5ya/s8DEQnKzN/w=="
+ },
+ "expires": "2027-10-08T19:00:00.000Z",
+ "setAt": "2026-10-08T16:34:29.215Z",
+ "setBy": "Karen B."
+}
