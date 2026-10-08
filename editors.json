@@ -17,6 +17,22 @@
    "added": "2026-10-08T16:31:48.863Z",
    "setAt": "2026-10-08T16:31:48.863Z",
    "expires": "2027-10-08T19:00:00.000Z"
+  },
+  {
+   "name": "Rick C.",
+   "admin": false,
+   "state": "setup",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "zP+tqEFj0nZz14sDG+C1/w==",
+    "iv": "9mBFaZlYHlkieroz",
+    "ciphertext": "e7mzKS7nEFbD/uOwgVY1TB/wrFmwCI3XydGysNlMdhYvcxrdMx48LjkKLgdure5yvDbwNIHql4gP4R6hPNWxmMp/1/RXicAWVzwuj0+vdLXIKnK5e4DxG5kgd9qDuvE98j08GZeX4MSWrHCP7w=="
+   },
+   "added": "2026-10-08T16:45:41.802Z",
+   "expires": "2027-10-08T19:00:00.000Z"
   }
  ]
 }
