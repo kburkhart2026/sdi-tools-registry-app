@@ -33,6 +33,22 @@
    },
    "added": "2026-10-08T16:45:41.802Z",
    "expires": "2027-10-08T19:00:00.000Z"
+  },
+  {
+   "name": "Jeff D.",
+   "admin": false,
+   "state": "setup",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "uqc1QkkKEkfxtkbUugL64A==",
+    "iv": "6NuTlZoBrA/MI6sq",
+    "ciphertext": "BtXsWEwmIGl9cswg0a1KqkGvd/hUfMDm8Ulta37U3tQcmhV5rqmHzkHMTeULSGvwBDmK8Fj25/iEB3CDq4L09spj7nQ3aX5Aola9Rgaoy3xasuBgaXYgBmmLAeP30MqDC2IBXYxBlt9StNg+bg=="
+   },
+   "added": "2026-10-08T16:47:47.310Z",
+   "expires": "2027-10-08T19:00:00.000Z"
   }
  ]
 }
