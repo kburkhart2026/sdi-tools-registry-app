@@ -1,0 +1,22 @@
+{
+ "v": 1,
+ "editors": [
+  {
+   "name": "Karen B.",
+   "admin": true,
+   "state": "active",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "w/UXAzvn4II/Kqjd1s3isA==",
+    "iv": "aE+Ja2qpotyEt8WF",
+    "ciphertext": "NASgSLBLen9x89FVjVW4+aNzV2rbbtwOt22IwAcddZhgqva/l5UyBaidpf3r9GN7CeLRqjIn8LZyE/r8jzsUS+qp6cgPX0GvTslVFUTAW/QpoVcDun/mIQ2vaWPhgWBnj0RiJC3jFycYm5gzGA=="
+   },
+   "added": "2026-10-08T16:31:48.863Z",
+   "setAt": "2026-10-08T16:31:48.863Z",
+   "expires": "2027-10-08T19:00:00.000Z"
+  }
+ ]
+}
