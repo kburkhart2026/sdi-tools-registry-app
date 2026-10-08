@@ -81,6 +81,22 @@
    },
    "added": "2026-10-08T16:50:40.153Z",
    "expires": "2027-10-08T19:00:00.000Z"
+  },
+  {
+   "name": "Joseph O.",
+   "admin": false,
+   "state": "setup",
+   "lock": {
+    "v": 1,
+    "alg": "AES-GCM",
+    "kdf": "PBKDF2-SHA256",
+    "iterations": 4000000,
+    "salt": "ztSoVa/+ZHk2KNY6aPzQxg==",
+    "iv": "EYzCOad98zgX85Ax",
+    "ciphertext": "WOWBRfYwJYCDJ8vY/uf9z7AtnRMpGwJI6l4a4Q65/MhbPJIAs6PYouHAyvf/bwo1F4hdavZ5s/PRsOkdSoMC2EZOBw1tDC6x8zXayYuS7JeHkcumxznpRpSFca7ilHi/djPMsB8UpVJsfzEdTw=="
+   },
+   "added": "2026-10-08T16:51:16.556Z",
+   "expires": "2027-10-08T19:00:00.000Z"
   }
  ]
 }
