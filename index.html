@@ -963,11 +963,16 @@ aside.margin:not(.wide){width:max(var(--panel-w), 560px)}
 .cc-name{font-size:14px;font-weight:600;color:var(--gray-700);margin-top:1px;padding-left:22px}
 .cc-sub{font-size:12.5px;color:var(--gray-500);padding-left:22px}
 .cc.open .cc-code{font-size:15px;letter-spacing:.06em}
-.cc.open .cc-name{font-family:var(--font-cond);font-weight:700;text-transform:uppercase;font-size:34px;line-height:1.05;color:var(--sdi-black);letter-spacing:.02em;padding-left:0;margin-top:2px}
+.cc.open .cc-name{font-family:var(--font-cond);font-weight:700;text-transform:uppercase;font-size:28px;line-height:1.05;color:var(--sdi-black);letter-spacing:.02em;padding-left:0;margin-top:2px}
 .cc-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:6px;font-size:13px}
 .cc-tot{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:2px}
 .cc-v{font-family:var(--font-cond);font-weight:700;font-size:20px;color:var(--sdi-black);line-height:1;white-space:nowrap}
-.cc.open .cc-v{font-size:32px}
+.cc.open .cc-v{font-size:40px}
+/* honest totals: an open figure is amber and carries the Partial stamp */
+.psum .big.part,.cc-v.part,.pg-strip .part{color:var(--amber-text)}
+.pstamp{display:inline-block;margin-left:8px;vertical-align:.45em;font-family:var(--font-cond);font-weight:700;font-size:12px;line-height:1.4;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-text);background:var(--amber-bg);border:1.5px solid var(--amber-line);border-radius:3px;padding:0 6px}
+.cc-v .pstamp{font-size:11px}
+.pg-strip .pstamp{vertical-align:.15em}
 .cc-s{font-size:12.5px;color:var(--gray-500);white-space:nowrap} .cc-s.a{color:var(--amber-text);font-weight:700}
 .cc-unk{font-family:var(--font-cond);font-weight:700;font-size:16px;color:var(--amber-text);white-space:nowrap}
 .cc-none{font-family:var(--font-cond);font-weight:700;font-size:16px;color:var(--gray-500);white-space:nowrap}
@@ -1001,7 +1006,7 @@ aside.margin:not(.wide){width:max(var(--panel-w), 560px)}
 .tt tr.rband td{background:var(--gray-50);color:var(--gray-600);font-size:12.5px;font-weight:700;padding:7px 10px}
 .tt tr.reuse td{background:var(--gray-50);color:var(--gray-500)}
 .tt tr.reuse .tlink{color:var(--sdi-black)}
-@media (max-width:900px){ .pg-sel{min-width:0;width:100%} .cc.open .cc-name{font-size:26px} .cc-head{grid-template-columns:1fr} .cc-tot{align-items:flex-start} }
+@media (max-width:900px){ .pg-sel{min-width:0;width:100%} .cc.open .cc-name{font-size:24px} .cc.open .cc-v{font-size:32px} .cc-head{grid-template-columns:1fr} .cc-tot{align-items:flex-start} }
 /* tool map (1d) */
 .tmap{border:1px solid var(--border-subtle);box-shadow:none}
 .tmap thead th{border-bottom:2px solid var(--sdi-black)}
@@ -2712,7 +2717,8 @@ function progSummaryHtml(){
   const inc = sm.all.filter(x => x.kind === 'unknown' || x.kind === 'incomplete' || x.kind === 'nolist');
   let h = '<div class="psum"><div class="pname"><span class="pdot" style="background:'+esc(pr.color)+'"></span>'+esc(pr.code)+'</div>'+
     '<div class="lbl">Program total · '+sm.required.length+' required'+(sm.pool.length ? ', '+(pr.electiveCount || 0)+' electives' : '')+'</div>';
-  if(costs) h += '<div class="big">'+money(sm.total)+'</div><div class="split2"><span>'+supMark('sdi')+'SDI supplied</span><b>'+money(sm.sdi)+'</b><span>'+supMark('student')+'Student supplied</span><b>'+money(sm.student)+'</b></div>';
+  // An open total (unpriced tools, unlisted courses, electives not picked) is amber and says Partial.
+  if(costs) h += '<div class="big'+(sm.open ? ' part' : '')+'">'+money(sm.total)+(sm.open ? PARTIAL : '')+'</div><div class="split2"><span>'+supMark('sdi')+'SDI supplied</span><b>'+money(sm.sdi)+'</b><span>'+supMark('student')+'Student supplied</span><b>'+money(sm.student)+'</b></div>';
   if(inc.length) h += '<div class="attn">⚠ '+inc.length+' course'+(inc.length === 1 ? '' : 's')+' incomplete · <button class="link" data-act="showIncomplete">show</button></div>';
   if(sm.missing) h += '<div class="attn">⚠ '+sm.missing+' elective'+(sm.missing === 1 ? '' : 's')+' not picked</div>';
   if(sm.unset) h += '<div class="attn">⚠ Number of electives to choose not set</div>';
@@ -2720,7 +2726,7 @@ function progSummaryHtml(){
 }
 function courseRowHtml(x, sm, costs){
   const on = S.F.crs.includes(x.code), picked = !x.elective || sm.chosen.includes(x.code);
-  const t = !costs ? '' : x.kind === 'unknown' ? '<span class="t a">Not listed</span>' : x.kind === 'nolist' ? '<span class="t a">Disagree</span>' : x.kind === 'none' ? '<span class="t m">No materials</span>' : x.kind === 'nomatch' ? '<span class="t m">—</span>' : '<span class="t">'+money(x.cost.total)+'</span>';
+  const t = !costs ? '' : x.kind === 'unknown' ? '<span class="t a">Not listed</span>' : x.kind === 'nolist' ? '<span class="t a">Disagree</span>' : x.kind === 'none' ? '<span class="t m">No materials</span>' : x.kind === 'nomatch' ? '<span class="t m">—</span>' : '<span class="t'+(x.cost.unpriced ? ' a' : '')+'">'+money(x.cost.total)+'</span>';
   const max = curProgram().electiveCount, full = x.elective && !sm.chosen.includes(x.code) && max && sm.chosen.length >= max;
   return '<div class="crow'+(S.sel === x.code ? ' sel' : '')+(picked ? '' : ' dim')+'">'+
     '<input type="checkbox" data-change="fcrs" value="'+esc(x.code)+'"'+(on ? ' checked' : '')+' aria-label="Show only the ticked courses: '+esc(x.code)+'">'+
@@ -2807,7 +2813,7 @@ function programHtml(){
   const noneN = db.courses.filter(r => !r.programs.length).length;
   let h = '<div class="pg"><div class="pg-bar"><select class="in inline pg-sel" data-change="progSel" aria-label="Program">'+db.programs.map(p => '<option value="'+esc(p.id)+'"'+(p.id === pr.id ? ' selected' : '')+'>'+esc(p.code)+(p.name ? ' · '+esc(p.name) : '')+'</option>').join('')+
     (noneN || pr === NONE_PROG ? '<option value="__none"'+(pr === NONE_PROG ? ' selected' : '')+'>Not in any program ('+noneN+')</option>' : '')+'</select>'+
-    (railCollapsed() ? '<span class="pg-strip">'+esc(pr.code)+(costs ? ' · '+money(sm.total) : '')+'</span>' : '')+
+    (railCollapsed() ? '<span class="pg-strip">'+esc(pr.code)+(costs ? ' · <span'+(sm.open ? ' class="part"' : '')+'>'+money(sm.total)+'</span>'+(sm.open ? PARTIAL : '') : '')+'</span>' : '')+
     '<span class="grow"></span>'+
     '<span class="pg-acts">'+(S.cmap ? '' : [['map', 'Program tool map'], ['week', 'Week/Module tool map']].map(([v, l]) => { const on = S.progView === v;
       return '<button class="abtn'+(on ? ' on' : '')+'" data-act="progView" data-v="'+(on ? 'courses' : v)+'" aria-pressed="'+on+'">'+svgI(PG_ICONS[v], null, 1.9, 17)+l+'</button>'; }).join(''))+'</span></div>'+chipsHtml();
@@ -2829,12 +2835,14 @@ function programHtml(){
   return h + '</div>';
 }
 // [the figure, the line under it]
+// The stamp on any total that is still open. Unknown is never zero, and a partial sum never reads as final.
+const PARTIAL = '<span class="pstamp">Partial</span>';
 function cardTotalParts(x, open){
   if(x.kind === 'unknown') return ['<span class="cc-unk">Tools not listed</span>', ''];
   if(x.kind === 'nolist') return ['<span class="cc-unk">Programs disagree</span>', ''];
   if(x.kind === 'none') return ['<span class="cc-none">No materials</span>', ''];
   if(x.kind === 'nomatch') return ['<span class="cc-none">—</span>', ''];
-  return ['<span class="cc-v">'+money(x.cost.total)+'</span>', x.cost.unpriced ? '<span class="cc-s a">'+x.cost.unpriced+' without a price</span>' :
+  return [x.cost.unpriced ? '<span class="cc-v part">'+money(x.cost.total)+PARTIAL+'</span>' : '<span class="cc-v">'+money(x.cost.total)+'</span>', x.cost.unpriced ? '<span class="cc-s a">'+x.cost.unpriced+' without a price</span>' :
     open && x.cost.sdi.n && x.cost.student.n ? '<span class="cc-s">SDI '+money(x.cost.sdi.total)+' · Student '+money(x.cost.student.total)+'</span>' : ''];
 }
 function cardTotalHtml(x, open){ return cardTotalParts(x, open).join(''); }
@@ -3315,7 +3323,6 @@ PANELS.editors = function(p){
       '<label class="field"><span>Confirm password</span><input class="in" id="vkPw2" type="password" autocomplete="new-password"></label>'+
       '<div class="row" style="justify-content:flex-start"><button class="btn pri" type="submit">Save viewer password</button><button class="btn" type="button" data-act="vkCancel">Cancel</button></div>'
       : '<button class="btn sm" type="button" data-act="vkOpen">'+(vk ? 'Change' : 'Set')+'</button>')+'</form>';
-  if(!/github\.io$/.test(location.hostname)) body += '<div class="ebox"><h3>Publish the app</h3><p class="g" style="margin:0 0 10px">Copies <code>app/index.html</code> to '+esc(ACCESS.app)+'. Live at the link a minute later.</p><button class="btn sm" data-act="appPublish">Choose index.html…</button></div>';
   return panelFrame('Editors', list.length+' editor'+(list.length === 1 ? '' : 's')+(list.some(e => e.state === 'setup') ? ' · '+list.filter(e => e.state === 'setup').length+' waiting' : ''), body);
 };
 
@@ -3355,7 +3362,7 @@ function toolFormHtml(px, it, edit, o){
   // Basics
   let h = tsec('basics', 'Basics', [it.generic, it.brand, typeLabel(it.type)].filter(Boolean).join(' · '), miss.basics,
     (px === 'a'
-      ? '<label class="field"><span>Tool name</span><input class="in" id="aName" data-input="addName" autocomplete="off" placeholder="Start typing. Existing entries appear below." value="'+esc(it.name || '')+'"></label><div id="aMatches"></div>'
+      ? '<label class="field"><span>Tool name</span><input class="in" id="aName" data-input="addName" autocomplete="off" value="'+esc(it.name || '')+'"></label><div id="aMatches"></div>'
       : f('Name', 'Tool name', it.name))+
     '<div class="tgrid2">'+f('Generic', 'Generic name', it.generic, ' placeholder="e.g. Multimeter"')+
       f('Brand', 'Brand', it.brand, ' placeholder="e.g. Hakko, Holybro"'+(it.brandRequired && !it.brand ? ' data-need="1"' : ''), chk('BrandReq', 'Brand required', it.brandRequired, ' data-change="toolLive" data-px="'+px+'"'))+'</div>'+
@@ -4980,21 +4987,6 @@ ACT.vkSet = f => gateBusy(f, 'Checking…', async () => {
   }
   throw ghErr(409);
 });
-ACT.appPublish = async () => {
-  const inp = $('#filePick'), was = inp.accept; inp.accept = '.html,text/html';
-  const f = await pickFile(); inp.accept = was; if(!f) return;
-  if(!/SDI Tools Registry/.test(f.text) || !/<script>/.test(f.text)){ toast('That isn’t the Tools Registry app. Choose app/index.html.', 'err'); return; }
-  if(!confirm('Publish '+f.name+' ('+Math.round(f.text.length / 1024)+' KB) to '+ACCESS.app+'? Everyone gets it on their next reload.')) return;
-  try{
-    const cur = await gh('/contents/index.html?ref='+ACCESS.branch, {}, ACCESS.app);
-    const sha = cur.ok ? (await cur.json()).sha : null;
-    if(!cur.ok && cur.status !== 404) throw ghErr(cur.status);
-    const body = { message:'Publish the app', content:b64(f.text), branch:ACCESS.branch, author:ghAuthor() }; if(sha) body.sha = sha;
-    const r = await gh('/contents/index.html', { method:'PUT', body:JSON.stringify(body) }, ACCESS.app);
-    if(!r.ok) throw ghErr(r.status);
-    toast('Published. Live at the link in about a minute.');
-  }catch(e){ toast(e.message, 'err'); }
-};
 ACT.openLocal = async () => {
   const f = await pickFile(); if(!f) return;
   try{
