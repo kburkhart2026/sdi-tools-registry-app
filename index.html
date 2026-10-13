@@ -21,7 +21,7 @@
   --font-body:"proxima-nova","Mulish",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   --font-cond:"proxima-nova-condensed","Saira Condensed","Arial Narrow",sans-serif;
   --shadow-sm:0 1px 2px rgba(16,24,32,.06); --shadow-md:0 2px 8px rgba(16,24,32,.08);
-  --bad:#AB0028; --bad-bg:#FBE9EE; --ok:#353533; --ok-bg:#ECECE9;
+  --bad:#AB0028; --bad-bg:#FBE9EE; --bad-line:#E8C2CA; --ok:#353533; --ok-bg:#ECECE9;
   --panel-w:440px; --rail-w:300px;
   /* Color roles (Design handoff, 2026-10-05). Each color has one meaning:
      ink = data and the SDI-supplied marker; crimson = primary button, links,
@@ -55,7 +55,6 @@ input,select,textarea{font:inherit;color:inherit}
 .menu button{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:none;border:0;border-radius:3px;padding:9px 10px;color:inherit}
 .menu b{display:block;font-size:14px} .menu small{color:var(--mute);font-size:12.5px}
 .grp{display:flex;justify-content:space-between;align-items:center;margin:16px 2px 6px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute);font-weight:700}
-.pool{border:2px dashed var(--warn-line);background:#FFFCF5;border-radius:6px;padding:14px;margin:18px 0 6px}
 .pick{cursor:pointer;display:flex;gap:9px;align-items:flex-start;text-align:left;font:inherit}
 .pick:hover{border-color:var(--warn)}
 .pick.on{border:2px solid var(--warn);padding:8px 10px}
@@ -88,8 +87,8 @@ input,select,textarea{font:inherit;color:inherit}
 .tab.on{color:var(--ink);font-weight:700;border-bottom-color:var(--accent)}
 .hint{font-size:12.5px;color:var(--mute);white-space:nowrap}
 .banner{padding:10px 20px;font-size:14px;border-bottom:1px solid var(--line)}
-.banner.warn{background:var(--warn-bg);color:#5a3b00;border-color:var(--warn-line)}
-.banner.bad{background:var(--bad-bg);color:#6b1526;border-color:#e8c2ca}
+.banner.warn{background:var(--warn-bg);color:var(--amber-text);border-color:var(--warn-line)}
+.banner.bad{background:var(--bad-bg);color:var(--crimson-dk);border-color:var(--bad-line)}
 .banner.info{background:var(--bone);color:var(--ink2)}
 .banner button{margin-left:8px}
 .shell{flex:1;min-height:0;display:flex}
@@ -143,14 +142,12 @@ td:first-child{min-width:220px}
 .chip.info{background:var(--bone);color:var(--ink2)}
 .chip.mute{background:#EFECE5;color:var(--ink2)}
 .note{border-radius:6px;padding:10px 12px;font-size:14px;margin:0 0 12px}
-.note.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:#5a3b00}
-.note.bad{background:var(--bad-bg);border:1px solid #e8c2ca;color:#6b1526}
+.note.warn{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--amber-text)}
+.note.bad{background:var(--bad-bg);border:1px solid var(--bad-line);color:var(--crimson-dk)}
 .note.info{background:var(--bone);color:var(--ink2)}
 .note.plain{background:var(--soft);border:1px solid var(--line);color:var(--ink2)}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:14px}
 .kv dt{color:var(--mute)} .kv dd{margin:0}
-.total{display:flex;justify-content:space-between;align-items:baseline;padding:12px;border-top:1px solid var(--line);background:var(--soft);border-radius:0 0 6px 6px}
-.total .big{font-family:var(--font-cond);font-size:20px;font-weight:600}
 .stack>*+*{margin-top:14px}
 .muted-list{list-style:none;margin:0;padding:0}
 .muted-list li{padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
@@ -261,7 +258,7 @@ footer .chip.warn{border-radius:3px;font-weight:700}
 .choice input:checked+span.u{background:var(--stu);border-color:var(--stu)}
 .choice input:focus-visible+span{outline:2px solid var(--crimson);outline-offset:2px}
 .choice input:disabled{cursor:default}
-.in.need{border-color:var(--crimson);background:#FFF7F9}
+.in.need{border-color:var(--crimson);background:var(--bad-bg)}
 /* ---- filter groups fold, so the pane stays short ---- */
 .fgrp-t{display:flex;align-items:center;gap:6px;width:100%;background:none;border:0;padding:2px 0;text-align:left;cursor:pointer}
 .fgrp-t .lg-chev{width:12px;color:var(--mute)}
@@ -454,7 +451,7 @@ main{padding:18px 24px 48px}
 .tt td:not(:first-child){white-space:nowrap}
 /* 2026-10-06: course record */
 .padd{margin-top:6px}
-.padd-f{display:grid;grid-template-columns:120px minmax(0,1fr) auto auto;gap:8px;align-items:end;margin-top:8px;padding:10px 12px;background:var(--gray-50);border:1px solid var(--border-subtle);border-radius:4px}
+.padd-f{display:grid;grid-template-columns:120px minmax(0,1fr) auto auto;gap:8px;align-items:end;margin-top:8px;padding:10px 12px;background:var(--gray-50);border:1px solid var(--border-subtle);border-radius:6px}
 .padd-f .field{margin:0}
 .newtag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--gray-400);color:var(--gray-600);border-radius:3px;padding:0 5px;white-space:nowrap}
 /* 2026-10-06: card tweaks */
@@ -829,7 +826,7 @@ table.edt td.r{text-align:right;white-space:nowrap}
 .etag.wait{background:var(--gray-100);color:var(--gray-700)} .etag.warn{background:var(--warn-bg);color:var(--warn)} .etag.adm{background:var(--bone);color:var(--ink2)}
 .ebox{border:1px solid var(--line);border-radius:6px;padding:14px;margin-bottom:16px}
 .ebox h3{font-family:var(--font-cond);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:15px;margin:0 0 10px}
-.ecode{font-family:ui-monospace,Menlo,monospace;font-size:22px;letter-spacing:.12em;background:var(--soft);border:2px dashed var(--line2);border-radius:4px;padding:10px;text-align:center;margin:6px 0 8px;user-select:all}
+.ecode{font-family:ui-monospace,Menlo,monospace;font-size:22px;letter-spacing:.12em;background:var(--soft);border:2px dashed var(--line2);border-radius:6px;padding:10px;text-align:center;margin:6px 0 8px;user-select:all}
 .clent.read{padding-top:8px;padding-bottom:8px}
 .clent.read .clrow{display:flex;gap:8px;align-items:baseline;cursor:pointer;background:none;border:0;padding:0;width:100%;text-align:left;font:inherit;color:var(--ink2)}
 .clent.read .clrow b{font-weight:600;color:var(--ink)}
@@ -839,7 +836,7 @@ table.edt td.r{text-align:right;white-space:nowrap}
 <header class="top">
   <div class="brand">
     <img src="SDI-logo.png" alt="SDI" width="36" height="36" style="display:block;object-fit:contain" onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
-    <span aria-hidden="true" style="display:none;width:36px;height:36px;place-items:center;background:#101820;border-radius:6px;font-weight:900;font-size:14px;color:#ECE6DB;font-family:Impact,'Arial Black',sans-serif">SDI</span>
+    <span aria-hidden="true" style="display:none;width:36px;height:36px;place-items:center;background:#101820;border-radius:6px;font-weight:900;font-size:14px;color:#ECE6DB;font-family:var(--font-cond)">SDI</span>
     SDI Tools Registry
   </div>
   <div class="who">
@@ -2137,7 +2134,7 @@ function renderBanner(){
   // Coming back to new posts: one line, until it is opened or dismissed.
   const un = S.doc ? clogUnread(S.doc) : 0, newest = clogPosts(S.doc).reduce((m, e) => e.ts > m ? e.ts : m, '');
   if(un && !(S.panel && S.panel.kind === 'clog') && newest > String(lsGet('str_clog_banner', '')))
-    h += '<div class="banner clog"><b>'+un+' new changelog post'+(un === 1 ? '' : 's')+'</b> <button class="btn sm" data-act="clog">View</button><button class="iconbtn" data-act="clogBannerX" title="Dismiss" style="float:right">×</button></div>';
+    h += '<div class="banner clog"><b>'+un+' new changelog post'+(un === 1 ? '' : 's')+'</b> <button class="btn sm" data-act="clog">View</button><button class="iconbtn" data-act="clogBannerX" title="Dismiss" aria-label="Dismiss" style="float:right">×</button></div>';
   if(S.problem) h += '<div class="banner bad">'+esc(S.problem)+(S.mode === 'github' ? ' <button class="btn sm" data-act="refresh">Try again</button>' : '')+'</div>';
   if(S.repoInfo && S.repoInfo.private === false) h += '<div class="banner bad"><b>'+esc(repoLabel())+' is public.</b> Anyone on the internet can read every price in it. Make it private in the repo’s GitHub settings.</div>';
   if(S.remoteNewer) h += '<div class="banner warn"><b>'+esc(S.remoteBy || 'Someone')+'</b> saved changes. <button class="btn sm" data-act="refresh">Reload</button></div>';
@@ -2923,8 +2920,8 @@ function backLabel(){ return S.tab === 'program' ? (S.doc ? curProgram().code : 
 function panelFrame(title, sub, body, o){
   o = o || {};
   return '<div class="ph'+(o.cls ? ' '+o.cls : '')+'">'+(o.lead || '')+'<div class="ph-t">'+(S.wide ? '<button class="btn sm pback" data-act="close">← Back to '+esc(backLabel())+'</button>' : '')+'<h2>'+esc(title)+'</h2>'+(sub ? '<div class="sub">'+sub+'</div>' : '')+'</div><div class="ph-r"><div style="display:flex;gap:2px">'+
-    '<button class="iconbtn" data-act="wide" title="'+(S.wide ? 'Dock beside the page' : 'Expand to full screen')+'">'+(S.wide ? '⇲' : '⤢')+'</button>'+
-    '<button class="iconbtn" data-act="close" title="Close">×</button></div>'+(o.side || '')+'</div></div><div class="pb'+(o.cls ? ' '+o.cls : '')+'">'+body+'</div>'+(o.foot ? '<div class="pfoot">'+o.foot+'</div>' : '');
+    '<button class="iconbtn" data-act="wide" title="'+(S.wide ? 'Dock beside the page' : 'Expand to full screen')+'" aria-label="'+(S.wide ? 'Dock beside the page' : 'Expand to full screen')+'">'+(S.wide ? '⇲' : '⤢')+'</button>'+
+    '<button class="iconbtn" data-act="close" title="Close" aria-label="Close">×</button></div>'+(o.side || '')+'</div></div><div class="pb'+(o.cls ? ' '+o.cls : '')+'">'+body+'</div>'+(o.foot ? '<div class="pfoot">'+o.foot+'</div>' : '');
 }
 function renderPanel(){
   const a = $('#panel'), p = S.panel;
@@ -3012,7 +3009,7 @@ PANELS.margin = function(p){
       const df = snapshotDiff(d, pr, sn, hasPool ? pk.codes : [], tgt.creditProposals);
       return '<div class="msn"><span>'+esc(sn.on)+'</span><span class="g">'+esc([sn.by, basisLabel(sn.basis)].filter(Boolean).join(' · '))+(sn.modeled && sn.modeled.length ? ' · modeled '+esc(sn.modeled.join(', ')) : '')+'</span>'+
         '<b>'+pct(sn.grossPct)+'</b>'+(df.differs ? '<span class="mtag bad">Differs</span>' : '<span class="mtag ok">Matches</span>')+
-        (edit ? '<button class="iconbtn" data-act="mgSnapDel" data-sc="'+esc(scId)+'" data-id="'+esc(sn.id)+'" title="Delete snapshot">×</button>' : '<span></span>')+
+        (edit ? '<button class="iconbtn" data-act="mgSnapDel" data-sc="'+esc(scId)+'" data-id="'+esc(sn.id)+'" title="Delete snapshot" aria-label="Delete snapshot">×</button>' : '<span></span>')+
         (df.differs ? '<div class="mdiff">Now '+(df.now == null ? 'withheld' : pct(df.now))+' · '+esc(df.lines.slice(0, 6).join(' · '))+(df.lines.length > 6 ? ' · and '+(df.lines.length - 6)+' more' : '')+'</div>' : '')+'</div>';
     }).join('')+'</div>';
   }
