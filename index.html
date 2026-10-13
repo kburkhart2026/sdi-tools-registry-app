@@ -759,14 +759,18 @@ aside.margin:not(.wide){width:max(var(--panel-w), 560px)}
 .cc-msg{margin:0;padding:0 20px 16px;color:var(--gray-500);font-size:14px} .cc-msg.a{color:var(--amber-text);font-weight:700}
 .ptag{border:1px solid var(--border-subtle);border-radius:3px;background:#fff!important;color:var(--gray-700)!important}
 /* tools table */
-.tt{margin:0 20px 18px;border:1px solid var(--border-subtle);border-radius:6px;overflow-x:auto}
+.tt{container-type:inline-size;margin:0 20px 18px;border:1px solid var(--border-subtle);border-radius:6px;overflow-x:auto}
 .tt table{font-size:13.5px;min-width:760px}
 .tt th{background:#fff;text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--gray-600);border-bottom:2px solid var(--sdi-black);padding:9px 10px}
 .tt td{padding:9px 10px;border-bottom:1px solid var(--border-subtle)}
 .tt td:first-child{min-width:240px}
+/* When the table is squeezed (a tool record open beside it, a wide sidebar), the SKU columns step aside so Link and × stay on screen; the record shows both SKUs. */
+@container (max-width:900px){ .tt table{min-width:0} .tt th.sku,.tt td.sku{display:none} .tt td:first-child{min-width:200px} }
+.shell.has-panel .tt table{min-width:0} .shell.has-panel .tt th.sku,.shell.has-panel .tt td.sku{display:none}
 .tt .nw{white-space:nowrap}
 .tt .line{font-weight:700;color:var(--sdi-black)}
 .tt .sku{font-size:12.5px;color:var(--gray-600);overflow-wrap:anywhere}
+.tt td.sku{max-width:190px}
 .tt .dash,.dash{color:var(--gray-500)}
 .tm{font-size:12.5px;color:var(--gray-500);margin-top:2px}
 .tm .link{font-size:12.5px}
@@ -2678,7 +2682,7 @@ function linkCell(it){ const u = safeLink(it.link); return u ? '<a href="'+esc(u
 function toolTableHtml(d, code, key, rows, carried, o){
   const ncol = 6 + (o.costs ? 2 : 0) + (o.edit ? 1 : 0);
   const wk = it => '<td class="nw">'+(o.week ? weekSel(d, it, code, 'data-change="week" data-code="'+esc(code)+'" data-id="'+it.id+'"', true) : weekOf(it, code) || '<span class="dash">—</span>')+'</td>';
-  let h = '<div class="tt"><table><thead><tr><th>Tool</th><th class="num">Qty</th><th>First week/module used</th>'+(o.costs ? '<th class="num">Unit</th><th class="num">Line</th>' : '')+'<th>Vendor SKU / model</th><th>SDI SKU</th><th>Link</th>'+(o.edit ? '<th></th>' : '')+'</tr></thead><tbody>';
+  let h = '<div class="tt"><table><thead><tr><th>Tool</th><th class="num">Qty</th><th>First week/module used</th>'+(o.costs ? '<th class="num">Unit</th><th class="num">Line</th>' : '')+'<th class="sku">Vendor SKU / model</th><th class="sku">SDI SKU</th><th>Link</th>'+(o.edit ? '<th></th>' : '')+'</tr></thead><tbody>';
   const groups = ['sdi', 'student'].map(b => [b, rows.filter(l => bucketOf(d.items[l.item]) === b)]).filter(g => g[1].length);
   for(const [b, L] of groups){
     h += '<tr class="bgrp"><td colspan="'+ncol+'">'+supMark(b)+supLabel(b)+' · '+L.length+'</td></tr>';
