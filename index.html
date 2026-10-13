@@ -901,7 +901,7 @@ const ROLES = {
   published:   { label:'Viewer', tabs:['program'], tools:[], courses:false, assign:false, price:false, text:false, add:false, rule:false, costs:false },
 };
 // First week used: a whole week of the course, 1 to WEEK_MAX.
-const WEEK_MAX = 52;
+const WEEK_MAX = 8;
 const TOOL_HINT = { registry:'Add and edit courses and programs', catalog:'Every tool, its price, vendor and link' };
 const TAB_LABEL = { courses:'Tools by Course', catalog:'Full Tool Catalog', program:'Tools by Program', registry:'Course Registry' };
 
@@ -1649,7 +1649,7 @@ function courseLength(d, code){ const n = Math.max(0, ...((d.courseDb || { cours
 function canWeek(){ return can('assign') || can('text'); }
 // short: numbers only, for the course card.
 function weekSel(d, it, code, attrs, short){
-  const w = weekOf(it, code), n = Math.max(courseLength(d, code) || 16, w || 0);
+  const w = weekOf(it, code), n = Math.max(Math.min(courseLength(d, code) || WEEK_MAX, WEEK_MAX), w || 0);
   return '<select class="wsel'+(short ? ' short' : '')+(w ? '' : ' unset')+'" '+attrs+' aria-label="First week/module '+esc(it.name)+' is used in '+esc(code)+'"><option value="">'+(w || short ? '—' : 'Set week/module')+'</option>'+
     Array.from({ length:n }, (_, i) => '<option value="'+(i+1)+'"'+(i+1 === w ? ' selected' : '')+'>'+(short ? '' : 'Week/Module ')+(i+1)+'</option>').join('')+'</select>';
 }
@@ -3283,7 +3283,7 @@ PANELS.add = function(p){
     as += '<label class="field"><span>Assign to course</span><select class="in" id="aCourse" data-change="addCourse"><option value="">Registry only, no course yet</option>'+codes.map(x => '<option value="'+esc(x)+'"'+(x === code ? ' selected' : '')+'>'+esc(x)+(d.courses[x].name ? ' · '+esc(d.courses[x].name) : '')+'</option>').join('')+'</select></label>';
     if(keys.length > 1) as += '<label class="field"><span>Which list</span><select class="in" id="aKey">'+keys.map(k => '<option value="'+esc(k)+'"'+(k === key ? ' selected' : '')+'>'+esc(progLabel(k))+'</option>').join('')+'</select></label>';
     if(code && canWeek()) as += '<label class="field"><span>First week/module used</span><select class="in" id="aWeek"><option value="">Not set</option>'+
-      Array.from({ length:courseLength(d, code) || 16 }, (_, i) => '<option value="'+(i+1)+'">Week/Module '+(i+1)+'</option>').join('')+'</select></label>';
+      Array.from({ length:Math.min(courseLength(d, code) || WEEK_MAX, WEEK_MAX) }, (_, i) => '<option value="'+(i+1)+'">Week/Module '+(i+1)+'</option>').join('')+'</select></label>';
   }
   const qty = assign ? '<label class="field"><span>Quantity per student</span><input class="in" id="aQty" type="number" min="0.01" step="any" value="1"></label>' : '';
   const body = toolFormHtml('a', { name:p.name || '', type:'equipment', supplied:'sdi', kind:'', usedIn:[], weeks:{} }, true, { cost, qty, assign: as, weeks:true, courseSum: assign && code ? code : '' });
