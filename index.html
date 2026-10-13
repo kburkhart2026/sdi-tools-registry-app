@@ -3282,9 +3282,11 @@ PANELS.add = function(p){
   if(assign){
     as += '<label class="field"><span>Assign to course</span><select class="in" id="aCourse" data-change="addCourse"><option value="">Registry only, no course yet</option>'+codes.map(x => '<option value="'+esc(x)+'"'+(x === code ? ' selected' : '')+'>'+esc(x)+(d.courses[x].name ? ' · '+esc(d.courses[x].name) : '')+'</option>').join('')+'</select></label>';
     if(keys.length > 1) as += '<label class="field"><span>Which list</span><select class="in" id="aKey">'+keys.map(k => '<option value="'+esc(k)+'"'+(k === key ? ' selected' : '')+'>'+esc(progLabel(k))+'</option>').join('')+'</select></label>';
+    if(code && canWeek()) as += '<label class="field"><span>First week/module used</span><select class="in" id="aWeek"><option value="">Not set</option>'+
+      Array.from({ length:courseLength(d, code) || 16 }, (_, i) => '<option value="'+(i+1)+'">Week/Module '+(i+1)+'</option>').join('')+'</select></label>';
   }
   const qty = assign ? '<label class="field"><span>Quantity per student</span><input class="in" id="aQty" type="number" min="0.01" step="any" value="1"></label>' : '';
-  const body = toolFormHtml('a', { name:p.name || '', type:'equipment', supplied:'sdi', kind:'', usedIn:[] }, true, { cost, qty, assign: as, courseSum: assign && code ? code : '' });
+  const body = toolFormHtml('a', { name:p.name || '', type:'equipment', supplied:'sdi', kind:'', usedIn:[], weeks:{} }, true, { cost, qty, assign: as, weeks:true, courseSum: assign && code ? code : '' });
   return panelFrame('Add a tool', '', body, { cls:'tool', foot: postBoxHtml(false)+'<span class="grow"></span>'+postTickHtml()+'<button class="btn pri" data-act="addNew" data-postlabel="Add and post">'+(assign && code ? 'Add and assign to '+esc(code) : 'Add to the registry')+'</button>' });
 };
 function bigrams(s){ const out = new Map(); for(let i = 0; i < s.length-1; i++){ const g = s.slice(i, i+2); out.set(g, (out.get(g) || 0)+1); } return out; }
@@ -5037,12 +5039,16 @@ function addLine(doc, code, key, item, qty){
   c.lists[key].push({ item, qty });
   c.materials = 'listed';
 }
+function readAddWeek(){ const e = $('#aWeek'); return e && e.value ? Number(e.value) : null; }
 function readQty(){ const e = $('#aQty'); if(!e) return 1; const q = Number(e.value); if(!(isFinite(q) && q > 0)) throw new Error('Quantity must be more than zero.'); return q; }
 ACT.useExisting = async b => {
   const code = $('#aCourse').value, key = $('#aKey') ? $('#aKey').value : (S.doc.courses[code] && Object.keys(S.doc.courses[code].lists)[0]) || '*';
   let qty; try{ qty = readQty(); }catch(e){ toast(e.message, 'err'); return; }
-  const id = b.dataset.id;
-  const ok = await save('Add '+S.doc.items[id].name+' to '+code+(key !== '*' ? ' ('+key+')' : ''), doc => addLine(doc, code, key, id, qty));
+  const id = b.dataset.id, aw = readAddWeek();
+  const ok = await save('Add '+S.doc.items[id].name+' to '+code+(key !== '*' ? ' ('+key+')' : ''), doc => {
+    addLine(doc, code, key, id, qty);
+    if(aw){ const x = doc.items[id]; x.weeks = Object.assign({}, x.weeks); x.weeks[code] = aw; }
+  });
   if(ok){ S.sel = code; S.collapsed.delete(code); closePanel(); }
 };
 ACT.addNew = async () => {
@@ -5057,6 +5063,9 @@ ACT.addNew = async () => {
   let fields;
   try{ fields = readToolForm('a'); }catch(e){ toast(e.message, 'err'); return; }
   delete fields.name;
+  const weeks = Object.fromEntries(Object.entries(readWeeks()).filter(([c, w]) => w && fields.usedIn.includes(c)));
+  const aw = readAddWeek(); if(code && aw) weeks[code] = aw;
+  fields.weeks = weeks;
   const confirmed = cost != null;
   let newId = null;
   const addOp = doc => {
@@ -5400,8 +5409,8 @@ document.addEventListener('change', e => {
   if(k === 'toolLive') syncToolForm(t.dataset.px);
   if(k === 'reuseProg'){ const pid = t.value, tb = $('#'+t.dataset.px+'ReusePick'); document.querySelectorAll('#'+t.dataset.px+'ReusePick tr[data-progs]').forEach(l => { l.hidden = !!pid && !l.dataset.progs.split(' ').includes(pid); }); if(tb && pid) tb.classList.add('all'); }
   // Ticking a course gives it a week dropdown; unticking shows Not used again.
-  if(k === 'usedTick' && S.panel && S.panel.kind === 'item'){
-    const it = S.doc.items[S.panel.id], cell = $('#'+t.dataset.px+'Wk-'+cardId(t.value));
+  if(k === 'usedTick' && S.panel && (S.panel.kind === 'item' || S.panel.kind === 'add')){
+    const it = S.panel.kind === 'add' ? { name:'this tool', weeks:{} } : S.doc.items[S.panel.id], cell = $('#'+t.dataset.px+'Wk-'+cardId(t.value));
     if(it && cell) cell.innerHTML = t.checked ? (canWeek() ? weekSel(S.doc, it, t.value, 'data-wk="'+esc(t.value)+'"') : weekOf(it, t.value) ? weekText(weekOf(it, t.value)) : '<span class="dash">—</span>') : '<select class="wsel" disabled aria-label="Not used in '+esc(t.value)+'"><option>Not used</option></select>';
   }
   if(k === 'addReuse' && t.value) addReuse(t.value, t.dataset.code);
